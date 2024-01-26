@@ -1,48 +1,47 @@
-# CakePHP
+# Database Design
 
-[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](https://travis-ci.org/cakephp/cakephp)
-[![Code consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/grade.svg)](https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/)
+## users Table
 
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
-Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
+### Columns
 
+| Column Name | Data Type | Constraints |
+| ----------- | --------- | ----------- |
+| id          | BIGINT    | AUTO_INCREMENT, NOT NULL, PRIMARY KEY |
+| name        | VARCHAR(20) | NOT NULL |
+| email       | VARCHAR(256) | NOT NULL, UNIQUE |
+| password    | VARCHAR   | NOT NULL |
+| image_url   | VARCHAR   |
+| created_at  | TIMESTAMP | NOT NULL |
+| deleted_at  | TIMESTAMP | NULL |
 
-## Some Handy Links
+### Notes
+- `id`: Unique identifier for each user.
+- `name`: User's name. Maximum length of 20 characters.
+- `email`: User's email address. Maximum length of 256 characters. It must be unique.
+- `password`: User's password. Ensure this is securely hashed before storing.
+- `image_url`: URL of the user's profile picture.
+- `created_at`: Timestamp when the user was created.
+- `deleted_at`: Timestamp for soft deletion of the user. NULL if the user is active.
 
-[CakePHP](https://cakephp.org) - The rapid development PHP framework
+## messages Table
 
-[CookBook](https://book.cakephp.org) - THE CakePHP user documentation; start learning here!
+### Columns
 
-[API](https://api.cakephp.org) - A reference to CakePHP's classes
+| Column Name       | Data Type | Constraints |
+| ----------------- | --------- | ----------- |
+| id                | BIGINT    | AUTO_INCREMENT, NOT NULL, PRIMARY KEY |
+| sender_id         | BIGINT    | NOT NULL, FOREIGN KEY (references Users.id) |
+| receiver_id       | BIGINT    | NOT NULL, FOREIGN KEY (references Users.id) |
+| message           | TEXT      | NOT NULL |
+| replies_message_id| BIGINT    | NULL, FOREIGN KEY (references Messages.id) |
+| created_at        | TIMESTAMP | NOT NULL |
+| deleted_at        | TIMESTAMP | NULL |
 
-[Plugins](https://plugins.cakephp.org) - A repository of extensions to the framework
-
-[The Bakery](https://bakery.cakephp.org) - Tips, tutorials and articles
-
-[Community Center](https://community.cakephp.org) - A source for everything community related
-
-[Training](https://training.cakephp.org) - Join a live session and get skilled with the framework
-
-[CakeFest](https://cakefest.org) - Don't miss our annual CakePHP conference
-
-[Cake Software Foundation](https://cakefoundation.org) - Promoting development related to CakePHP
-
-
-## Get Support!
-
-[#cakephp](https://webchat.freenode.net/?channels=#cakephp) on irc.freenode.net - Come chat with us, we have cake
-
-[Google Group](https://groups.google.com/group/cake-php) - Community mailing list and forum
-
-[GitHub Issues](https://github.com/cakephp/cakephp/issues) - Got issues? Please tell us!
-
-[Roadmaps](https://github.com/cakephp/cakephp/wiki#roadmaps) - Want to contribute? Get involved!
-
-
-## Contributing
-
-[CONTRIBUTING.md](CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project
-
-[CookBook "Contributing" Section (2.x)](https://book.cakephp.org/2.0/en/contributing.html) [(3.x)](https://book.cakephp.org/3.0/en/contributing.html) - Version-specific details about contributing to the project
+### Notes
+- `id`: Unique identifier for each message.
+- `sender_id`: The id of the user who sent the message. Foreign key referencing the id in the users table.
+- `receiver_id`: The id of the user who is the recipient of the message. Foreign key referencing the id in the users table.
+- `message`: The content of the message.
+- `replies_message_id`: If the message is a reply, this column contains the id of the original message. NULL if it's not a reply.
+- `created_at`: Timestamp when the message was created.
+- `deleted_at`: Timestamp for soft deletion of the message. NULL if the message is active.
