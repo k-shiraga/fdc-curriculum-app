@@ -611,6 +611,8 @@ class AuthComponent extends Component {
 		if (empty($user)) {
 			$user = $this->identify($this->request, $this->response);
 		}
+		debug($user);
+
 		if ($user) {
 			if (static::$sessionKey) {
 				$this->Session->renew();
@@ -619,6 +621,7 @@ class AuthComponent extends Component {
 				static::$_user = $user;
 			}
 			$event = new CakeEvent('Auth.afterIdentify', $this, array('user' => $user));
+			debug($event);
 			$this->_Collection->getController()->getEventManager()->dispatch($event);
 		}
 		return (bool)$this->user();
@@ -765,11 +768,16 @@ class AuthComponent extends Component {
  * @return array|bool User record data, or false, if the user could not be identified.
  */
 	public function identify(CakeRequest $request, CakeResponse $response) {
+
+		// debug($request);
 		if (empty($this->_authenticateObjects)) {
+			debug(12);
 			$this->constructAuthenticate();
 		}
 		foreach ($this->_authenticateObjects as $auth) {
+			debug(13);
 			$result = $auth->authenticate($request, $response);
+			debug($result);
 			if (!empty($result) && is_array($result)) {
 				return $result;
 			}
