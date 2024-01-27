@@ -7,7 +7,7 @@
 | Column Name | Data Type | Constraints |
 | ----------- | --------- | ----------- |
 | id          | BIGINT    | AUTO_INCREMENT, NOT NULL, PRIMARY KEY |
-| name        | VARCHAR(20) | NOT NULL |
+| username    | VARCHAR(20) | NOT NULL |
 | email       | VARCHAR(256) | NOT NULL, UNIQUE |
 | password    | VARCHAR   | NOT NULL |
 | image_url   | VARCHAR   |

@@ -33,19 +33,36 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
     public $components = array(
         'Session',
+        'Flash',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
-            'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
+            'loginRedirect' => array('controller' => 'posts', 'action' => 'index'),
+            'logoutRedirect' => array(
+                'controller' => 'pages',
+                'action' => 'display',
+                'home'
+            ),
             'authenticate' => array(
                 'Form' => array(
-                    'fields' => array('username' => 'email')
+                    'passwordHasher' => 'Blowfish'
                 )
-            )
+            ),
+            'authorize' => array('Controller') // この行を追加しました
         )
     );
+    
+    public function isAuthorized($user) {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+    
+        // デフォルトは拒否
+        return false;
+    }
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('login', 'logout'); // Allow users to register and logout.
+        // ログインしているユーザーの情報をビューに渡す
+        $this->set('loggedInUser', $this->Auth->user());
     }
 }
