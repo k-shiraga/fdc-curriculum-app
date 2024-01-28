@@ -68,5 +68,12 @@ class User extends AppModel {
         }
         return true;
     }
+
+      // ファイルアップロードのバリデーションルール
+    public function uploadFile($check) {
+        // $check には ['profile_picture' => ['tmp_name' => '...', 'error' => '...']] が含まれる
+        // ファイルアップロードのバリデーションロジックをここに実装
+        return is_uploaded_file($check['profile_picture']['tmp_name']) && $check['profile_picture']['error'] == 0;
+    }
 }
 ?>

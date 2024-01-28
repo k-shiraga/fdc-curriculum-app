@@ -75,23 +75,45 @@ class UsersController extends AppController {
   }
 
   public function edit($id = null) {
-      $this->User->id = $id;
-      if (!$this->User->exists()) {
-          throw new NotFoundException(__('Invalid user'));
-      }
-      if ($this->request->is('post') || $this->request->is('put')) {
-          if ($this->User->save($this->request->data)) {
-              $this->Flash->success(__('The user has been saved'));
-              return $this->redirect(array('action' => 'index'));
-          }
-          $this->Flash->error(
-              __('The user could not be saved. Please, try again.')
-          );
-      } else {
-          $this->request->data = $this->User->findById($id);
-          unset($this->request->data['User']['password']);
-      }
-  }
+    if (!$id && empty($this->request->data)) {
+        $this->Session->setFlash('Invalid User');
+        $this->redirect(array('action' => 'index'));
+    }
+    // debug($this->request->data);
+    if (!empty($this->request->data)) {
+
+        $this->User->id = $id;
+        // 画像アップロード処理
+        $image = $this->request->data['User']['profile_photo'];
+        // debug($image);
+        if ($image['error'] === UPLOAD_ERR_OK) {
+            // debug(333);
+            $imageName = date('YmdHis') . $image['name'];
+            // debug($imageName);
+            $imagePath = WWW_ROOT . 'upload' . DS . $imageName;
+            // debug($imagePath);
+            if (move_uploaded_file($image['tmp_name'], $imagePath)) {
+                // debug(11);
+                $this->request->data['User']['profile_photo'] = $imageName;
+            } else {
+                unset($this->request->data['User']['profile_photo']);
+                $this->Flash->error(__('Unable to upload image, please try again.'));
+            }
+        } else {
+            unset($this->request->data['User']['profile_photo']);
+        }
+
+        if ($this->User->save($this->request->data)) {
+            // debug(000);
+            $this->Session->setFlash('The user has been saved');
+            $this->redirect(array('action' => 'view', $this->User->id));
+        } else {
+            $this->Session->setFlash('The user could not be saved. Please, try again.');
+        }
+    } else {
+        $this->request->data = $this->User->read(null, $id);
+    }
+}
 
   public function delete($id = null) {
       // Prior to 2.5 use
