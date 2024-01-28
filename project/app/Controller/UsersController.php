@@ -17,7 +17,7 @@ class UsersController extends AppController {
               $this->User->saveField('last_login_time', date('Y-m-d H:i:s'));
               $this->redirect($this->Auth->redirect());
           } else {
-              $this->Flash->error(__('Invalid username or password, try again'));
+              $this->Flash->error(__('Invalid email or password, try again'));
           }
       }
   }
@@ -31,12 +31,18 @@ class UsersController extends AppController {
       $this->set('users', $this->paginate());
   }
 
-  public function view($id = null) {
-      $this->User->id = $id;
-      if (!$this->User->exists()) {
-          throw new NotFoundException(__('Invalid user'));
-      }
-      $this->set('user', $this->User->findById($id));
+  public function view($id) {
+    debug($id);
+    if (!$id) {
+        throw new NotFoundException(__('Invalid user'));
+    }
+
+    $user = $this->User->findById($id);
+    if (!$user) {
+        throw new NotFoundException(__('User not found'));
+    }
+
+    $this->set('user', $user);
   }
 
   public function add() {

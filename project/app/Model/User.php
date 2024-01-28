@@ -37,13 +37,18 @@ class User extends AppModel {
                 'message' => 'パスワードが一致しません。'
             )
         ),
-        // 'role' => array(
-        //     'valid' => array(
-        //         'rule' => array('inList', array('admin', 'author')),
-        //         'message' => 'Please enter a valid role',
-        //         'allowEmpty' => false
-        //     )
-        // )
+        'profile_picture' => array(
+            'extension' => array(
+                'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
+                'message' => '許可されていない画像形式です。'
+            ),
+            'upload-file' => array(
+                'rule' => 'uploadFile',
+                'message' => 'ファイルのアップロードに失敗しました。',
+                'required' => false,
+                'allowEmpty' => true,
+            ),
+        )
     );
 
     // パスワード確認用のカスタムバリデーションメソッド

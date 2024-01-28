@@ -43,6 +43,7 @@ class AppController extends Controller {
             ),
             'authenticate' => array(
                 'Form' => array(
+                    'fields' => array('username' => 'email'), 
                     'passwordHasher' => 'Blowfish'
                 )
             ),
@@ -51,18 +52,20 @@ class AppController extends Controller {
     );
     
     public function isAuthorized($user) {
-        // Admin can access every action
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
+        return true;
+        // // Admin can access every action
+        // if (isset($user['role']) && $user['role'] === 'admin') {
+            
+        // }
     
-        // デフォルトは拒否
-        return false;
+        // // デフォルトは拒否
+        // return false;
     }
 
     public function beforeFilter() {
         parent::beforeFilter();
         // ログインしているユーザーの情報をビューに渡す
         $this->set('loggedInUser', $this->Auth->user());
+        
     }
 }

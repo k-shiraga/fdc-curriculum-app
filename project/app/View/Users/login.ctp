@@ -5,9 +5,9 @@
 <?php echo $this->Form->create('User'); ?>
     <fieldset>
         <legend>
-            <?php echo __('Please enter your username and password'); ?>
+            <?php echo __('Please enter your email and password'); ?>
         </legend>
-        <?php echo $this->Form->input('username');
+        <?php echo $this->Form->input('email');
         echo $this->Form->input('password');
     ?>
     </fieldset>
