@@ -1,15 +1,37 @@
-<div class="user-profile">
-    <h1>User Profile</h1>
-    <div class="profile-photo">
-        <?php echo $this->Html->image($user['User']['image_url'], ['alt' => 'Profile Photo']); ?>
+<?php
+// ユーザーデータの取得
+$user = $user['User'];
+// 画像のパスを設定
+$imagePath = !empty($user['profile_photo']) ? $this->Html->url('/upload/' . $user['profile_photo']) : null;
+
+// CSSの読み込み
+echo $this->Html->css('//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
+?>
+
+<h1>ユーザープロフィール</h1>
+
+<div>
+    <h2>ユーザー名: <?php echo h($user['username']); ?></h2>
+
+    <div>
+        <strong>生年月日:</strong>
+        <?php echo h($user['birthdate']); ?>
     </div>
-    <h2><?php echo h($user['User']['username']) . ', ' . h($user['User']['age']); ?></h2>
-    <p>Gender: <?php echo h($user['User']['gender']); ?></p>
-    <p>Birthdate: <?php echo h($user['User']['birthdate']); ?></p>
-    <p>Joined: <?php echo h($user['User']['joined']); ?></p>
-    <p>Last Login: <?php echo h($user['User']['last_login_time']); ?></p>
-    <div class="hobby">
-        <p>Hubby:</p>
-        <p><?php echo nl2br(h($user['User']['hobby'])); ?></p>
+
+    <div>
+        <strong>性別:</strong>
+        <?php echo h($user['gender'] == 1 ? 'Male' : 'Female'); ?>
     </div>
+
+    <div>
+        <strong>趣味:</strong>
+        <?php echo h($user['hobby']); ?>
+    </div>
+
+    <?php if ($imagePath): ?>
+    <div>
+        <strong>プロフィール写真:</strong>
+        <img src="<?php echo $imagePath; ?>" alt="Profile Photo" style="width: 150px; height: 150px;"/>
+    </div>
+    <?php endif; ?>
 </div>

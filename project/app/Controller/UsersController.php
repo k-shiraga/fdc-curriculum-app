@@ -31,8 +31,7 @@ class UsersController extends AppController {
       $this->set('users', $this->paginate());
   }
 
-  public function view($id) {
-    debug($id);
+  public function view($id = null) {
     if (!$id) {
         throw new NotFoundException(__('Invalid user'));
     }
@@ -43,7 +42,7 @@ class UsersController extends AppController {
     }
 
     $this->set('user', $user);
-  }
+}
 
   public function add() {
       if ($this->request->is('post')) {

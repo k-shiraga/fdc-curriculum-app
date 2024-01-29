@@ -37,17 +37,23 @@ class User extends AppModel {
                 'message' => 'パスワードが一致しません。'
             )
         ),
-        'profile_picture' => array(
-            'extension' => array(
-                'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
-                'message' => '許可されていない画像形式です。'
-            ),
-            'upload-file' => array(
-                'rule' => 'uploadFile',
-                'message' => 'ファイルのアップロードに失敗しました。',
-                'required' => false,
-                'allowEmpty' => true,
-            ),
+        'birthdate' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => '生年月日は必須です。'
+            )
+        ),
+        'gender' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => '性別は必須です。'
+            )
+        ),
+        'hobby' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => '趣味は必須です。'
+            )
         )
     );
 
